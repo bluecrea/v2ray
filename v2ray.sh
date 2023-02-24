@@ -8,7 +8,7 @@ cyan='\e[96m'
 none='\e[0m'
 
 # Root
-[[ $(id -u) != 0 ]] && echo -e " 哎呀……请使用 ${red}root ${none}用户运行 ${yellow}~(^_^) ${none}" && exit 1
+[[ $(id -u) != 0 ]] && echo -e " 请使用 ${red}root ${none}用户运行 ${yellow}~(^_^) ${none}" && exit 1
 
 _version="v3.67"
 
@@ -52,22 +52,22 @@ if [[ $(command -v yum) ]]; then
 
 fi
 
-backup="/etc/v2ray/233blog_v2ray_backup.conf"
+backup="/etc/v2ray/v2ray_backup.conf"
 
-if [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f $backup && -d /etc/v2ray/233boy/v2ray ]]; then
+if [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f $backup && -d /etc/v2ray/v2ray ]]; then
 
 	. $backup
 
-elif [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f /etc/v2ray/233blog_v2ray_backup.txt && -d /etc/v2ray/233boy/v2ray ]]; then
+elif [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f /etc/v2ray/v2ray_backup.txt && -d /etc/v2ray/v2ray ]]; then
 
-	. /etc/v2ray/233boy/v2ray/tools/v1xx_to_v3xx.sh
+	. /etc/v2ray/tools/v1xx_to_v3xx.sh
 
 else
-	echo -e " 哎呀哎呀…… ${red}出错咯...请重新安装V2Ray${none} ${yellow}~(^_^) ${none}" && exit 1
+	echo -e "安装${red}出错！请重新安装V2Ray${none} ${yellow}~(^_^) ${none}" && exit 1
 fi
 
 if [[ $mark != "v3" ]]; then
-	. /etc/v2ray/233boy/v2ray/tools/v3.sh
+	. /etc/v2ray/tools/v3.sh
 fi
 if [[ $v2ray_transport -ge 18 && $v2ray_transport -ne 33 ]]; then
 	dynamicPort=true
@@ -78,9 +78,9 @@ if [[ $path_status ]]; then
 fi
 
 uuid=$(cat /proc/sys/kernel/random/uuid)
-old_id="e55c8d17-2cf3-b21a-bcf1-eeacb011ed79"
+old_id="ac661108-01a2-4dc1-ba5c-717792065295"
 v2ray_server_config="/etc/v2ray/config.json"
-v2ray_client_config="/etc/v2ray/233blog_v2ray_config.json"
+v2ray_client_config="/etc/v2ray/v2ray_config.json"
 v2ray_pid=$(pgrep -f /usr/bin/v2ray/v2ray)
 caddy_pid=$(pgrep -f /usr/local/bin/caddy)
 _v2ray_sh="/usr/local/sbin/v2ray"
@@ -93,7 +93,7 @@ else
 	v2ray_ver_v5=1
 fi
 
-. /etc/v2ray/233boy/v2ray/src/init.sh
+. /etc/v2ray/src/init.sh
 systemd=true
 # _test=true
 
@@ -242,16 +242,6 @@ view_shadowsocks_config_info() {
 		shadowsocks_config
 	fi
 }
-get_shadowsocks_config_qr_link() {
-	if [[ $shadowsocks ]]; then
-		get_ip
-		_load qr.sh
-		_ss_qr
-	else
-		shadowsocks_config
-	fi
-
-}
 
 get_shadowsocks_config_qr_ask() {
 	echo
@@ -260,7 +250,6 @@ get_shadowsocks_config_qr_ask() {
 		read -p "$(echo -e "默认 [${magenta}N$none]:")" y_n
 		[ -z $y_n ] && y_n="n"
 		if [[ $y_n == [Yy] ]]; then
-			get_shadowsocks_config_qr_link
 			break
 		elif [[ $y_n == [Nn] ]]; then
 			break
@@ -319,7 +308,7 @@ change_shadowsocks_config() {
 shadowsocks_config() {
 	echo
 	echo
-	echo -e " $red大佬...你没有配置 Shadowsocks $none...不过现在想要配置的话也是可以的 ^_^"
+	echo -e " $red 没有配置 Shadowsocks $none"
 	echo
 	echo
 
@@ -374,17 +363,17 @@ shadowsocks_port_config() {
 			fi
 			if [[ $tls && $new_ssport == "80" ]] || [[ $tls && $new_ssport == "443" ]]; then
 				echo
-				echo -e "由于你当前已使用了 "$green"WebSocket + TLS $none或$green HTTP/2"$none" 传输协议."
+				echo -e "你当前已使用了 "$green"WebSocket + TLS $none或$green HTTP/2"$none" 传输协议."
 				echo
-				echo -e "所以不能选择 "$magenta"80"$none" 或 "$magenta"443"$none" 端口"
+				echo -e "不能选择 "$magenta"80"$none" 或 "$magenta"443"$none" 端口"
 				error
 			elif [[ $dynamicPort ]] && [[ $v2ray_dynamicPort_start == $new_ssport || $v2ray_dynamicPort_end == $new_ssport ]]; then
 				echo
-				echo -e " 抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
+				echo -e "抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
 				error
 			elif [[ $dynamicPort ]] && [[ $v2ray_dynamicPort_start -lt $new_ssport && $new_ssport -le $v2ray_dynamicPort_end ]]; then
 				echo
-				echo -e " 抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
+				echo -e "抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
 				error
 			elif [[ $socks && $new_ssport == $socks_port ]]; then
 				echo
@@ -416,12 +405,12 @@ shadowsocks_password_config() {
 
 	while :; do
 		echo -e "请输入 "$yellow"Shadowsocks"$none" 密码"
-		read -p "$(echo -e "(默认密码: ${cyan}233blog.com$none)"): " new_sspass
-		[ -z "$new_sspass" ] && new_sspass="233blog.com"
+		read -p "$(echo -e "(默认密码: ${cyan}goxianguo.com$none)"): " new_sspass
+		[ -z "$new_sspass" ] && new_sspass="goxianguo.com"
 		case $new_sspass in
 		*[/$]*)
 			echo
-			echo -e " 由于这个脚本太辣鸡了..所以密码不能包含$red / $none或$red $ $none这两个符号.... "
+			echo -e "密码不能包含$red / $none或$red $ $none这两个符号.... "
 			echo
 			error
 			;;
@@ -478,12 +467,12 @@ change_shadowsocks_port() {
 		case $new_ssport in
 		$ssport)
 			echo
-			echo " 跟当前端口一毛一样....修改个鸡鸡哦"
+			echo "不能与当前端口一致"
 			error
 			;;
 		$v2ray_port)
 			echo
-			echo -e " 不能和$cyan V2Ray 端口 $none一毛一样...."
+			echo -e " 不能和$cyan V2Ray 端口$none 一致...."
 			error
 			;;
 		[1-9] | [1-9][0-9] | [1-9][0-9][0-9] | [1-9][0-9][0-9][0-9] | [1-5][0-9][0-9][0-9][0-9] | 6[0-4][0-9][0-9][0-9] | 65[0-4][0-9][0-9] | 655[0-3][0-5])
@@ -492,17 +481,17 @@ change_shadowsocks_port() {
 			fi
 			if [[ $tls && $new_ssport == "80" ]] || [[ $tls && $new_ssport == "443" ]]; then
 				echo
-				echo -e "由于你已选择了 "$green"WebSocket + TLS $none或$green HTTP/2"$none" 传输协议."
+				echo -e "已选择了 "$green"WebSocket + TLS $none或$green HTTP/2"$none" 传输协议."
 				echo
-				echo -e "所以不能选择 "$magenta"80"$none" 或 "$magenta"443"$none" 端口"
+				echo -e "不能选择 "$magenta"80"$none" 或 "$magenta"443"$none" 端口"
 				error
 			elif [[ $dynamicPort ]] && [[ $v2ray_dynamicPort_start == $new_ssport || $v2ray_dynamicPort_end == $new_ssport ]]; then
 				echo
-				echo -e " 抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
+				echo -e "抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
 				error
 			elif [[ $dynamicPort ]] && [[ $v2ray_dynamicPort_start -lt $new_ssport && $new_ssport -le $v2ray_dynamicPort_end ]]; then
 				echo
-				echo -e " 抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
+				echo -e "抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
 				error
 			elif [[ $socks && $new_ssport == $socks_port ]]; then
 				echo
@@ -544,12 +533,12 @@ change_shadowsocks_password() {
 		case $new_sspass in
 		$sspass)
 			echo
-			echo " 跟当前密码一毛一样....修改个鸡鸡哦"
+			echo "不能与当前密码一致"
 			error
 			;;
 		*[/$]*)
 			echo
-			echo -e " 由于这个脚本太辣鸡了..所以密码不能包含$red / $none或$red $ $none这两个符号.... "
+			echo -e "密码不能包含$red / $none和$red $ $none这两个符号.... "
 			echo
 			error
 			;;
@@ -591,7 +580,7 @@ change_shadowsocks_ciphers() {
 			new_ssciphers=${ciphers[$ssciphers_opt - 1]}
 			if [[ $new_ssciphers == $ssciphers ]]; then
 				echo
-				echo " 跟当前加密协议一毛一样....修改个鸡鸡哦"
+				echo "不能与当前加密协议一致"
 				error && continue
 			fi
 			echo
@@ -637,12 +626,12 @@ disable_shadowsocks() {
 			echo
 			echo
 			echo
-			echo -e "$green Shadowsocks 已关闭...不过你也可以随时重新启用 Shadowsocks ...只要你喜欢$none"
+			echo -e "$green Shadowsocks 已关闭...你可以随时重新启用 Shadowsocks$none"
 			echo
 			break
 		elif [[ "$y_n" == [Nn] ]]; then
 			echo
-			echo -e " $green已取消关闭 Shadowsocks ....$none"
+			echo -e "$green 已取消关闭 Shadowsocks ....$none"
 			echo
 			break
 		else
@@ -754,17 +743,17 @@ change_v2ray_port() {
 			case $v2ray_port_opt in
 			$v2ray_port)
 				echo
-				echo " 哎呀...跟当前端口一毛一样呀...修改个鸡鸡哦"
+				echo "不能与当前端口一致"
 				error
 				;;
 			[1-9] | [1-9][0-9] | [1-9][0-9][0-9] | [1-9][0-9][0-9][0-9] | [1-5][0-9][0-9][0-9][0-9] | 6[0-4][0-9][0-9][0-9] | 65[0-4][0-9][0-9] | 655[0-3][0-5])
 				if [[ $dynamicPort ]] && [[ $v2ray_dynamicPort_start == $v2ray_port_opt || $v2ray_dynamicPort_end == $v2ray_port_opt ]]; then
 					echo
-					echo -e " 抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
+					echo -e "抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
 					error
 				elif [[ $dynamicPort ]] && [[ $v2ray_dynamicPort_start -lt $v2ray_port_opt && $v2ray_port_opt -le $v2ray_dynamicPort_end ]]; then
 					echo
-					echo -e " 抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
+					echo -e "抱歉，此端口和 V2Ray 动态端口 冲突，当前 V2Ray 动态端口范围为：${cyan}$port_range${none}"
 					error
 				elif [[ $shadowsocks && $v2ray_port_opt == $ssport ]]; then
 					echo
@@ -810,7 +799,6 @@ download_v2ray_config_ask() {
 		read -p "$(echo -e "默认 [${cyan}N$none]:")" y_n
 		[ -z $y_n ] && y_n="n"
 		if [[ $y_n == [Yy] ]]; then
-			download_v2ray_config
 			break
 		elif [[ $y_n == [Nn] ]]; then
 			break
@@ -844,10 +832,8 @@ change_v2ray_transport() {
 		for ((i = 1; i <= ${#transport[*]}; i++)); do
 			Stream="${transport[$i - 1]}"
 			if [[ "$i" -le 9 ]]; then
-				# echo
 				echo -e "$yellow  $i. $none${Stream}"
 			else
-				# echo
 				echo -e "$yellow $i. $none${Stream}"
 			fi
 		done
@@ -868,27 +854,27 @@ change_v2ray_transport() {
 			4 | 5 | 33)
 				if [[ $v2ray_port == "80" || $v2ray_port == "443" ]]; then
 					echo
-					echo -e " 抱歉...如果你想要使用${cyan} ${transport[$v2ray_transport_opt - 1]} $none传输协议.. ${red}V2Ray 端口不能为 80 或者 443 ...$none"
+					echo -e "抱歉...如果你想要使用${cyan} ${transport[$v2ray_transport_opt - 1]} $none传输协议.. ${red}V2Ray 端口不能为 80 或者 443 ...$none"
 					echo
-					echo -e " 当前 V2Ray 端口: ${cyan}$v2ray_port$none"
+					echo -e "当前 V2Ray 端口: ${cyan}$v2ray_port$none"
 					error
 				elif [[ $shadowsocks ]] && [[ $ssport == "80" || $ssport == "443" ]]; then
 					echo
-					echo -e " 抱歉...如果你想要使用${cyan} ${transport[$v2ray_transport_opt - 1]} $none传输协议.. ${red}Shadowsocks 端口不能为 80 或者 443 ...$none"
+					echo -e "抱歉...如果你想要使用${cyan} ${transport[$v2ray_transport_opt - 1]} $none传输协议.. ${red}Shadowsocks 端口不能为 80 或者 443 ...$none"
 					echo
-					echo -e " 当前 Shadowsocks 端口: ${cyan}$ssport$none"
+					echo -e "当前 Shadowsocks 端口: ${cyan}$ssport$none"
 					error
 				elif [[ $socks ]] && [[ $socks_port == "80" || $socks_port == "443" ]]; then
 					echo
-					echo -e " 抱歉...如果你想要使用${cyan} ${transport[$v2ray_transport_opt - 1]} $none传输协议.. ${red}Socks 端口不能为 80 或者 443 ...$none"
+					echo -e "抱歉...如果你想要使用${cyan} ${transport[$v2ray_transport_opt - 1]} $none传输协议.. ${red}Socks 端口不能为 80 或者 443 ...$none"
 					echo
-					echo -e " 当前 Socks 端口: ${cyan}$socks_port$none"
+					echo -e "当前 Socks 端口: ${cyan}$socks_port$none"
 					error
 				elif [[ $mtproto ]] && [[ $mtproto_port == "80" || $mtproto_port == "443" ]]; then
 					echo
-					echo -e " 抱歉...如果你想要使用${cyan} ${transport[$v2ray_transport_opt - 1]} $none传输协议.. ${red}MTProto 端口不能为 80 或者 443 ...$none"
+					echo -e "抱歉...如果你想要使用${cyan} ${transport[$v2ray_transport_opt - 1]} $none传输协议.. ${red}MTProto 端口不能为 80 或者 443 ...$none"
 					echo
-					echo -e " 当前 MTProto 端口: ${cyan}$mtproto_port$none"
+					echo -e "当前 MTProto 端口: ${cyan}$mtproto_port$none"
 					error
 				else
 					echo
@@ -968,8 +954,8 @@ tls_config() {
 		echo
 		echo
 		echo
-		echo -e "请输入一个 ${magenta}正确的域名${none}，一定一定一定要正确，不！能！出！错！"
-		read -p "(例如：233blog.com): " new_domain
+		echo -e "请输入一个 ${magenta}正确的域名${none}！"
+		read -p "(例如：goxianguo.com): " new_domain
 		[ -z "$new_domain" ] && error && continue
 		echo
 		echo
@@ -1160,9 +1146,9 @@ path_config_ask() {
 path_config() {
 	echo
 	while :; do
-		echo -e "请输入想要 ${magenta}用来分流的路径 $none , 例如 /233blog , 那么只需要输入 233blog 即可"
-		read -p "$(echo -e "(默认: [${cyan}233blog$none]):")" new_path
-		[[ -z $new_path ]] && new_path="233blog"
+		echo -e "请输入想要 ${magenta}用来分流的路径 $none , 例如 /goxianguo , 那么只需要输入 goxianguo 即可"
+		read -p "$(echo -e "(默认: [${cyan}goxianguo$none]):")" new_path
+		[[ -z $new_path ]] && new_path="goxianguo"
 
 		case $new_path in
 		*[/$]*)
@@ -1612,7 +1598,7 @@ change_path_config() {
 	if [[ $v2ray_transport == [45] || $v2ray_transport == 33 ]] && [[ $caddy && $is_path ]]; then
 		echo
 		while :; do
-			echo -e "请输入想要 ${magenta}用来分流的路径$none , 例如 /233blog , 那么只需要输入 233blog 即可"
+			echo -e "请输入想要 ${magenta}用来分流的路径$none , 例如 /goxianguo , 那么只需要输入 goxianguo 即可"
 			read -p "$(echo -e "(当前分流的路径: [${cyan}/${path}$none]):")" new_path
 			[[ -z $new_path ]] && error && continue
 
@@ -1850,7 +1836,7 @@ blocked_hosts() {
 		echo
 		echo "备注: 广告拦截是基于 域名 拦截的..所以也许会造成浏览网页的时候出现部分元素留白..或者其他问题"
 		echo
-		echo "反馈问题或请求拦截更多域名: https://github.com/233boy/v2ray/issues"
+		echo "反馈问题或请求拦截更多域名: https://github.com/bluecrea/v2ray/issues"
 		echo
 		echo -e "当前广告拦截状态: $_info"
 		echo
@@ -2143,21 +2129,16 @@ get_v2ray_config() {
 				echo
 				echo "开始下载....请选择 V2Ray 客户端配置文件保存位置"
 				echo
-				# sz /etc/v2ray/233blog_v2ray.zip
-				local tmpfile="/tmp/233blog_v2ray_config_$RANDOM.json"
+				local tmpfile="/tmp/v2ray_config_$RANDOM.json"
 				cp -f $v2ray_client_config $tmpfile
 				sz $tmpfile
 				echo
 				echo
 				echo -e "$green 下载完成咯...$none"
 				echo
-				# echo -e "$yellow 解压密码 = ${cyan}233blog.com$none"
-				# echo
-				echo -e "$yellow SOCKS 监听端口 = ${cyan}2333${none}"
+				echo -e "$yellow SOCKS 监听端口 = ${cyan}8888${none}"
 				echo
 				echo -e "${yellow} HTTP 监听端口 = ${cyan}6666$none"
-				echo
-				echo "V2Ray 客户端使用教程: https://233v2.com/post/4/"
 				echo
 				break
 			else
@@ -2270,9 +2251,9 @@ get_v2ray_config_info_link() {
 	echo
 	echo -e "$green 正在生成链接.... 稍等片刻即可....$none"
 	echo
-	create_v2ray_config_text >/tmp/233blog_v2ray.txt
+	create_v2ray_config_text >/tmp/v2ray.txt
 	local random=$(echo $RANDOM-$RANDOM-$RANDOM | base64 -w 0)
-	local link=$(curl -s --upload-file /tmp/233blog_v2ray.txt "https://transfer.sh/${random}_233v2_v2ray.txt")
+	local link=$(curl -s --upload-file /tmp/v2ray.txt "https://transfer.sh/${random}_233v2_v2ray.txt")
 	if [[ $link ]]; then
 		echo
 		echo "---------- V2Ray 配置信息链接-------------"
@@ -2290,7 +2271,7 @@ get_v2ray_config_info_link() {
 		echo -e "$red 哎呀呀呀...出错咯...请重试$none"
 		echo
 	fi
-	rm -rf /tmp/233blog_v2ray.txt
+	rm -rf /tmp/v2ray.txt
 }
 get_v2ray_config_qr_link() {
 
@@ -2406,14 +2387,14 @@ update_v2ray.sh() {
 		echo
 	else
 		echo
-		echo -e " $green 咦...发现新版本耶....正在拼命更新.......$none"
+		echo -e " $green 发现新版本....正在更新.......$none"
 		echo
-		cd /etc/v2ray/233boy/v2ray
+		cd /etc/v2ray
 		git pull
-		cp -f /etc/v2ray/233boy/v2ray/v2ray.sh $_v2ray_sh
+		cp -f /etc/v2ray/v2ray.sh $_v2ray_sh
 		chmod +x $_v2ray_sh
 		echo
-		echo -e "$green 更新成功啦...当前 V2Ray 管理脚本 版本: ${cyan}$latest_version$none"
+		echo -e "$green 更新成功...当前 V2Ray 管理脚本 版本: ${cyan}$latest_version$none"
 		echo
 	fi
 
@@ -2614,11 +2595,10 @@ menu() {
 		echo
 		echo "帮助说明: https://233v2.com/post/1/"
 		echo
-		echo "反馈问题: https://github.com/233boy/v2ray/issues"
+		echo "反馈问题: https://github.com/bluecrea/v2ray/issues"
 		echo
-		echo "TG 频道: https://t.me/tg2333"
+		echo "微信小程序: 搜索「厨易」"
 		echo
-		echo "捐赠脚本作者: https://233v2.com/donate/"
 		echo
 		echo -e "$yellow  1. $none查看 V2Ray 配置"
 		echo

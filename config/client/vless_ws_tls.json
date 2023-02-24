@@ -5,11 +5,11 @@
             "settings": {
                 "vnext": [
                     {
-                        "address": "233blog.com",
-                        "port": 2333,
+                        "address": "goxianguo.com",
+                        "port": 5678,
                         "users": [
                             {
-                                "id": "e55c8d17-2cf3-b21a-bcf1-eeacb011ed79",
+                                "id": "ac661108-01a2-4dc1-ba5c-717792065295",
                                 "encryption": "none",
                                 "security": "auto"
                             }
@@ -21,12 +21,12 @@
                 "network": "ws",
                 "security": "tls",
                 "tlsSettings": {
-                    "serverName": "233blog.com"
+                    "serverName": "goxianguo.com"
                 },
                 "wsSettings": {
-                    "path": "/233blog",
+                    "path": "/",
                     "headers": {
-                        "Host": "233blog.com"
+                        "Host": "goxianguo.com"
                     }
                 }
             },
@@ -75,7 +75,7 @@
             }
         },
         {
-            "port": 2333,
+            "port": 5678,
             "protocol": "socks",
             "settings": {
                 "auth": "noauth",

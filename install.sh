@@ -13,7 +13,7 @@ _magenta() { echo -e ${magenta}$*${none}; }
 _cyan() { echo -e ${cyan}$*${none}; }
 
 # Root
-[[ $(id -u) != 0 ]] && echo -e "\n 哎呀……请使用 ${red}root ${none}用户运行 ${yellow}~(^_^) ${none}\n" && exit 1
+[[ $(id -u) != 0 ]] && echo -e "\n 请使用 ${red}root ${none}用户运行 ${yellow}~(^_^) ${none}\n" && exit 1
 
 cmd="apt-get"
 
@@ -41,8 +41,8 @@ case $sys_bit in
 	caddy_arch="arm64"
 	;;
 *)
-	echo -e " 
-	哈哈……这个 ${red}辣鸡脚本${none} 不支持你的系统。 ${yellow}(-_-) ${none}
+	echo -e "
+	此 ${red}脚本${none} 不支持你的系统。 ${yellow}(-_-) ${none}
 
 	备注: 仅支持 Ubuntu 16+ / Debian 8+ / CentOS 7+ 系统
 	" && exit 1
@@ -60,8 +60,8 @@ if [[ $(command -v apt-get) || $(command -v yum) ]] && [[ $(command -v systemctl
 
 else
 
-	echo -e " 
-	哈哈……这个 ${red}辣鸡脚本${none} 不支持你的系统。 ${yellow}(-_-) ${none}
+	echo -e "
+	此 ${red}脚本${none} 不支持你的系统。 ${yellow}(-_-) ${none}
 
 	备注: 仅支持 Ubuntu 16+ / Debian 8+ / CentOS 7+ 系统
 	" && exit 1
@@ -69,10 +69,10 @@ else
 fi
 
 uuid=$(cat /proc/sys/kernel/random/uuid)
-old_id="e55c8d17-2cf3-b21a-bcf1-eeacb011ed79"
+old_id="ac661108-01a2-4dc1-ba5c-717792065295"
 v2ray_server_config="/etc/v2ray/config.json"
-v2ray_client_config="/etc/v2ray/233blog_v2ray_config.json"
-backup="/etc/v2ray/233blog_v2ray_backup.conf"
+v2ray_client_config="/etc/v2ray/v2ray_config.json"
+backup="/etc/v2ray/v2ray_backup.conf"
 _v2ray_sh="/usr/local/sbin/v2ray"
 systemd=true
 # _test=true
@@ -120,7 +120,7 @@ ciphers=(
 )
 
 _load() {
-	local _dir="/etc/v2ray/233boy/v2ray/src/"
+	local _dir="/etc/v2ray/src/"
 	. "${_dir}$@"
 }
 _sys_timezone() {
@@ -328,8 +328,8 @@ tls_config() {
 
 	while :; do
 		echo
-		echo -e "请输入一个 ${magenta}正确的域名${none}，一定一定一定要正确，不！能！出！错！"
-		read -p "(例如：233blog.com): " domain
+		echo -e "请输入一个 ${magenta}正确的域名${none}！"
+		read -p "(例如：go.goxianguo.com): " domain
 		[ -z "$domain" ] && error && continue
 		echo
 		echo
@@ -358,7 +358,7 @@ tls_config() {
 				domain_check
 				echo
 				echo
-				echo -e "$yellow 域名解析 = ${cyan}我确定已经有解析了$none"
+				echo -e "$yellow 域名解析 = ${cyan}确定已经有解析了$none"
 				echo "----------------------------------------------------------------"
 				echo
 				break
@@ -384,7 +384,7 @@ auto_tls_config() {
 	echo -e "
 
 		安装 Caddy 来实现 自动配置 TLS
-		
+
 		如果你已经安装 Nginx 或 Caddy
 
 		$yellow并且..自己能搞定配置 TLS$none
@@ -453,9 +453,9 @@ path_config_ask() {
 path_config() {
 	echo
 	while :; do
-		echo -e "请输入想要 ${magenta} 用来分流的路径 $none , 例如 /233blog , 那么只需要输入 233blog 即可"
-		read -p "$(echo -e "(默认: [${cyan}233blog$none]):")" path
-		[[ -z $path ]] && path="233blog"
+		echo -e "请输入想要 ${magenta} 用来分流的路径 $none , 例如 /goxianguo , 那么只需要输入 goxianguo 即可"
+		read -p "$(echo -e "(默认: [${cyan}goxianguo$none]):")" path
+		[[ -z $path ]] && path="goxianguo"
 
 		case $path in
 		*[/$]*)
@@ -481,7 +481,7 @@ proxy_site_config() {
 	echo
 	while :; do
 		echo -e "请输入 ${magenta}一个正确的 $none ${cyan}网址$none 用来作为 ${cyan}网站的伪装$none , 例如 https://liyafly.com"
-		echo -e "举例...你当前的域名是 $green$domain$none , 伪装的网址的是 https://liyafly.com"
+		echo -e "举例: 你当前的域名是 $green$domain$none , 伪装的网址的是 https://liyafly.com"
 		echo -e "然后打开你的域名时候...显示出来的内容就是来自 https://liyafly.com 的内容"
 		echo -e "其实就是一个反代...明白就好..."
 		echo -e "如果不能伪装成功...可以使用 v2ray config 修改伪装的网址"
@@ -491,7 +491,7 @@ proxy_site_config() {
 		case $proxy_site in
 		*[#$]*)
 			echo
-			echo -e " 由于这个脚本太辣鸡了..所以伪装的网址不能包含$red # $none或$red $ $none这两个符号.... "
+			echo -e " 伪装的网址不能包含$red # $none或$red $ $none这两个符号.... "
 			echo
 			error
 			;;
@@ -617,8 +617,8 @@ shadowsocks_password_config() {
 
 	while :; do
 		echo -e "请输入 "$yellow"Shadowsocks"$none" 密码"
-		read -p "$(echo -e "(默认密码: ${cyan}233blog.com$none)"): " sspass
-		[ -z "$sspass" ] && sspass="233blog.com"
+		read -p "$(echo -e "(默认密码: ${cyan}goxianguo.com$none)"): " sspass
+		[ -z "$sspass" ] && sspass="goxianguo.com"
 		case $sspass in
 		*[/$]*)
 			echo
@@ -674,7 +674,7 @@ shadowsocks_ciphers_config() {
 install_info() {
 	clear
 	echo
-	echo " ....准备安装了咯..看看有毛有配置正确了..."
+	echo " ....准备安装，请确认配置正确..."
 	echo
 	echo "---------- 安装信息 -------------"
 	echo
@@ -753,7 +753,7 @@ domain_check() {
 		echo
 		echo -e " PING 测试结果: $cyan$test_domain$none"
 		echo
-		echo "备注...如果你的域名是使用 Cloudflare 解析的话..在 DNS 那, 将 (Proxy status / 代理状态), 设置成 (DNS only / 仅限 DNS)"
+		echo "注：如果你的域名是使用 Cloudflare 解析的话..在 DNS 那, 将 (Proxy status / 代理状态), 设置成 (DNS only / 仅限 DNS)"
 		echo
 		exit 1
 	fi
@@ -778,10 +778,9 @@ caddy_config() {
 install_v2ray() {
 	$cmd update -y
 	if [[ $cmd == "apt-get" ]]; then
-		$cmd install -y lrzsz git zip unzip curl wget qrencode libcap2-bin dbus
+		$cmd install -y lrzsz git zip unzip curl wget libcap2-bin dbus
 	else
-		# $cmd install -y lrzsz git zip unzip curl wget qrencode libcap iptables-services
-		$cmd install -y lrzsz git zip unzip curl wget qrencode libcap
+		$cmd install -y lrzsz git zip unzip curl wget libcap
 	fi
 	ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 	[ -d /etc/v2ray ] && rm -rf /etc/v2ray
@@ -792,26 +791,26 @@ install_v2ray() {
 	if [[ $local_install ]]; then
 		if [[ ! -d $(pwd)/config ]]; then
 			echo
-			echo -e "$red 哎呀呀...安装失败了咯...$none"
+			echo -e "$red 抱歉...安装失败...$none"
 			echo
-			echo -e " 请确保你有完整的上传 233v2.com 的 V2Ray 一键安装脚本 & 管理脚本到当前 ${green}$(pwd) $none目录下"
+			echo -e " 请确保你有完整的上传的V2Ray一键安装脚本 & 管理脚本到当前 ${green}$(pwd) $none目录下"
 			echo
 			exit 1
 		fi
-		mkdir -p /etc/v2ray/233boy/v2ray
-		cp -rf $(pwd)/* /etc/v2ray/233boy/v2ray
+		mkdir -p /etc/v2ray/v2ray
+		cp -rf $(pwd)/* /etc/v2ray/v2ray
 	else
 		pushd /tmp
-		git clone https://github.com/233boy/v2ray -b "$_gitbranch" /etc/v2ray/233boy/v2ray --depth=1
+		git clone https://github.com/bluecrea/v2ray -b "$_gitbranch" /etc/v2ray/v2ray --depth=1
 		popd
 
 	fi
 
-	if [[ ! -d /etc/v2ray/233boy/v2ray ]]; then
+	if [[ ! -d /etc/v2ray/v2ray ]]; then
 		echo
-		echo -e "$red 哎呀呀...克隆脚本仓库出错了...$none"
+		echo -e "$red 克隆脚本仓库出错了...$none"
 		echo
-		echo -e " 温馨提示..... 请尝试自行安装 Git: ${green}$cmd install -y git $none 之后再安装此脚本"
+		echo -e " 温馨提示: 请尝试自行安装 Git: ${green}$cmd install -y git $none 之后再安装此脚本"
 		echo
 		exit 1
 	fi
@@ -824,8 +823,8 @@ install_v2ray() {
 }
 
 config() {
-	cp -f /etc/v2ray/233boy/v2ray/config/backup.conf $backup
-	cp -f /etc/v2ray/233boy/v2ray/v2ray.sh $_v2ray_sh
+	cp -f /etc/v2ray/config/backup.conf $backup
+	cp -f /etc/v2ray/v2ray.sh $_v2ray_sh
 	chmod +x $_v2ray_sh
 
 	v2ray_id=$uuid
@@ -836,23 +835,6 @@ config() {
 		v2ray_dynamicPort_end=${v2ray_dynamic_port_end_input}
 	fi
 	_load config.sh
-
-	# if [[ $cmd == "apt-get" ]]; then
-	# 	cat >/etc/network/if-pre-up.d/iptables <<-EOF
-	# 		#!/bin/sh
-	# 		/sbin/iptables-restore < /etc/iptables.rules.v4
-	# 		/sbin/ip6tables-restore < /etc/iptables.rules.v6
-	# 	EOF
-	# 	chmod +x /etc/network/if-pre-up.d/iptables
-	# 	# else
-	# 	# 	[ $(pgrep "firewall") ] && systemctl stop firewalld
-	# 	# 	systemctl mask firewalld
-	# 	# 	systemctl disable firewalld
-	# 	# 	systemctl enable iptables
-	# 	# 	systemctl enable ip6tables
-	# 	# 	systemctl start iptables
-	# 	# 	systemctl start ip6tables
-	# fi
 
 	# systemctl restart v2ray
 	do_service restart v2ray
@@ -866,29 +848,21 @@ backup_config() {
 		sed -i "30s/=10000/=$v2ray_dynamic_port_start_input/; 33s/=20000/=$v2ray_dynamic_port_end_input/" $backup
 	fi
 	if [[ $shadowsocks ]]; then
-		sed -i "42s/=/=true/; 45s/=6666/=$ssport/; 48s/=233blog.com/=$sspass/; 51s/=chacha20-ietf/=$ssciphers/" $backup
+		sed -i "42s/=/=true/; 45s/=6666/=$ssport/; 48s/=goxianguo.com/=$sspass/; 51s/=chacha20-ietf/=$ssciphers/" $backup
 	fi
-	[[ $v2ray_transport == [45] || $v2ray_transport == 33 ]] && sed -i "36s/=233blog.com/=$domain/" $backup
+	[[ $v2ray_transport == [45] || $v2ray_transport == 33 ]] && sed -i "36s/=goxianguo.com/=$domain/" $backup
 	[[ $caddy ]] && sed -i "39s/=/=true/" $backup
 	[[ $ban_ad ]] && sed -i "54s/=/=true/" $backup
 	if [[ $is_path ]]; then
-		sed -i "57s/=/=true/; 60s/=233blog/=$path/" $backup
+		sed -i "57s/=/=true/; 60s/=goxianguo/=$path/" $backup
 		sed -i "63s#=https://liyafly.com#=$proxy_site#" $backup
 	fi
 }
 
 get_ip() {
-	# ip=$(curl -s https://ipinfo.io/ip)
-	# [[ -z $ip ]] && ip=$(curl -s https://api.ip.sb/ip)
-	# [[ -z $ip ]] && ip=$(curl -s https://api.ipify.org)
-	# [[ -z $ip ]] && ip=$(curl -s https://ip.seeip.org)
-	# [[ -z $ip ]] && ip=$(curl -s https://ifconfig.co/ip)
-	# [[ -z $ip ]] && ip=$(curl -s https://api.myip.com | grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}")
-	# [[ -z $ip ]] && ip=$(curl -s icanhazip.com)
-	# [[ -z $ip ]] && ip=$(curl -s myip.ipip.net | grep -oE "([0-9]{1,3}\.){3}[0-9]{1,3}")
 	export "$(wget -4 -qO- https://dash.cloudflare.com/cdn-cgi/trace | grep ip=)" >/dev/null 2>&1
 	[[ -z $ip ]] && export "$(wget -6 -qO- https://dash.cloudflare.com/cdn-cgi/trace | grep ip=)" >/dev/null 2>&1
-	[[ -z $ip ]] && echo -e "\n$red 获取IP失败, 这垃圾小鸡扔了吧！$none\n" && exit
+	[[ -z $ip ]] && echo -e "\n$red 获取IP失败！$none\n" && exit
 }
 
 error() {
@@ -921,14 +895,14 @@ show_config_info() {
 install() {
 	if [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f $backup && -d /etc/v2ray/233boy/v2ray ]]; then
 		echo
-		echo " 大佬...你已经安装 V2Ray 啦...无需重新安装"
+		echo " 你已经安装 V2Ray， 无需重新安装"
 		echo
 		echo -e " $yellow输入 ${cyan}v2ray${none} $yellow即可管理 V2Ray${none}"
 		echo
 		exit 1
-	elif [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f /etc/v2ray/233blog_v2ray_backup.txt && -d /etc/v2ray/233boy/v2ray ]]; then
+	elif [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f /etc/v2ray/v2ray_backup.txt && -d /etc/v2ray/233boy/v2ray ]]; then
 		echo
-		echo "  如果你需要继续安装.. 请先卸载旧版本"
+		echo "  如果你需要继续安装， 请先卸载旧版本"
 		echo
 		echo -e " $yellow输入 ${cyan}v2ray uninstall${none} $yellow即可卸载${none}"
 		echo
@@ -961,7 +935,7 @@ install() {
 }
 uninstall() {
 
-	if [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f $backup && -d /etc/v2ray/233boy/v2ray ]]; then
+	if [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f $backup && -d /etc/v2ray/v2ray ]]; then
 		. $backup
 		if [[ $mark ]]; then
 			_load uninstall.sh
@@ -971,15 +945,15 @@ uninstall() {
 			echo
 		fi
 
-	elif [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f /etc/v2ray/233blog_v2ray_backup.txt && -d /etc/v2ray/233boy/v2ray ]]; then
+	elif [[ -f /usr/bin/v2ray/v2ray && -f /etc/v2ray/config.json ]] && [[ -f /etc/v2ray/v2ray_backup.txt && -d /etc/v2ray/v2ray ]]; then
 		echo
 		echo -e " $yellow输入 ${cyan}v2ray uninstall${none} $yellow即可卸载${none}"
 		echo
 	else
 		echo -e "
-		$red 大胸弟...你貌似毛有安装 V2Ray ....卸载个鸡鸡哦...$none
+		$red 未检测到 V2Ray 无法卸载...$none
 
-		备注...仅支持卸载使用我 (233v2.com) 提供的 V2Ray 一键安装脚本
+		备注...仅支持卸载使用 goxianguo 提供的 V2Ray 一键安装脚本
 		" && exit 1
 	fi
 
@@ -990,7 +964,6 @@ _gitbranch=$2
 [ -z $1 ] && args="online"
 case $args in
 online)
-	#hello world
 	[[ -z $_gitbranch ]] && _gitbranch="master"
 	;;
 local)
@@ -998,9 +971,9 @@ local)
 	;;
 *)
 	echo
-	echo -e " 你输入的这个参数 <$red $args $none> ...这个是什么鬼啊...脚本不认识它哇"
+	echo -e " 输入的参数 <$red $args $none> 错误"
 	echo
-	echo -e " 这个辣鸡脚本仅支持输入$green local / online $none参数"
+	echo -e " 仅支持输入$green local / online $none参数"
 	echo
 	echo -e " 输入$yellow local $none即是使用本地安装"
 	echo
@@ -1013,11 +986,7 @@ esac
 clear
 while :; do
 	echo
-	echo "........... V2Ray 一键安装脚本 & 管理脚本 by 233v2.com .........."
-	echo
-	echo "帮助说明: https://233v2.com/post/1/"
-	echo
-	echo "搭建教程: https://233v2.com/post/2/"
+	echo "........... V2Ray 一键安装脚本 & 管理脚本 by 厨易 .........."
 	echo
 	echo " 1. 安装"
 	echo

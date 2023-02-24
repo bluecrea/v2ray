@@ -11,9 +11,9 @@
 			"settings": {
 				"clients": [
 					{
-						"id": "e55c8d17-2cf3-b21a-bcf1-eeacb011ed79",
+						"id": "ac661108-01a2-4dc1-ba5c-717792065295",
 						"level": 1,
-						"alterId": 233
+						"alterId": 64
 					}
 				]
 			},
@@ -28,11 +28,6 @@
 				]
 			}
 		}
-		//include_ss
-		//include_socks
-		//include_mtproto
-		//include_in_config
-		//
 	],
 	"outbounds": [
 		{
@@ -47,8 +42,6 @@
 			"settings": {},
 			"tag": "blocked"
         }
-		//include_out_config
-		//
 	],
 	"dns": {
 		"servers": [
@@ -68,11 +61,6 @@
                 ],
                 "outboundTag": "blocked"
             }
-			//include_ban_xx
-			//include_ban_bt
-			//include_ban_ad
-			//include_rules
-			//
 		]
 	},
 	"transport": {

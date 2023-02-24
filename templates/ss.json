@@ -1,9 +1,9 @@
         {
             "protocol": "shadowsocks",
-            "port": 6666, // port
+            "port": 6666,
             "settings": {
-                "method": "chacha20-ietf", // options > [aes-256-cfb, aes-128-cfb, chacha20, chacha20-ietf, aes-256-gcm, aes-128-gcm, chacha20-ietf-poly1305]
-                "password": "233blog.com", // password
+                "method": "chacha20-ietf",
+                "password": "goxianguo.com",
                 "network": "tcp,udp",
                 "level": 1,
                 "ota": false
